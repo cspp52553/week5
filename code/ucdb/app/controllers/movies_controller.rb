@@ -2,7 +2,14 @@ class MoviesController < ApplicationController
   # GET /movies
   # GET /movies.json
   def index
-    @movies = Movie.all
+    if params[:director_id].present?
+      director = Director.find(params[:director_id])
+      @movies = director.movies.limit(500)
+    else
+      @movies = Movie.limit(500)
+    end
+
+    @movies = @movies.order('title asc')
 
     respond_to do |format|
       format.html # index.html.erb
